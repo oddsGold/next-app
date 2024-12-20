@@ -2,7 +2,7 @@
 
 import React from "react";
 import {FilterCheckbox, FilterCheckboxProps} from "@/components/shared/filter-checkbox";
-import {Input} from "@/components/ui";
+import {Input, Skeleton} from "@/components/ui";
 
 type Item = FilterCheckboxProps;
 
@@ -11,6 +11,7 @@ interface Props {
     items: Item[];
     defaultItems: Item[];
     limit?: number;
+    loading?: boolean;
     searchInputPlaceholder?: string;
     onChange?: (value: string[]) => void;
     defaultValue?: string[];
@@ -22,15 +23,30 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
                                                           items,
                                                           defaultItems,
                                                           limit = 5,
+                                                          loading = false,
                                                           searchInputPlaceholder = 'Searching...',
                                                           className,
                                                           onChange,
                                                           defaultValue
-}) =>
-{
+                                                      }) => {
 
     const [showAll, setShowAll] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
+
+    if(loading) {
+        return (
+            <div className={className}>
+                <p className="font-bold mb-3">{title}</p>
+
+                {
+                    ...Array(limit).fill(0).map((_, i) => (
+                        <Skeleton key={i} className="h-6 mb-4 rounded-[8px]" />
+                    ))
+                }
+                <Skeleton className="w-28 h-6 mb-4 rounded-[8px]" />
+            </div>
+        )
+    }
 
     const list = showAll
         ? items.filter((item) => item.text.toLowerCase().includes(searchValue.toLowerCase()))
@@ -46,7 +62,8 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
 
             {showAll && (
                 <div className="mb-5">
-                    <Input onChange={onChangeSearchInput} placeholder={searchInputPlaceholder} className="bg-gray-50 border-none"/>
+                    <Input onChange={onChangeSearchInput} placeholder={searchInputPlaceholder}
+                           className="bg-gray-50 border-none"/>
                 </div>
             )}
 
