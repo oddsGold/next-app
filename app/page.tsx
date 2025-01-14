@@ -1,125 +1,50 @@
 import {Container, Filters, Title, TopBar} from "@/components/shared";
-import {ProductCard} from "@/components/shared/product-card";
 import {ProductGroupList} from "@/components/shared/products-group-list";
+import {prisma} from "@/prisma/prisma-client";
 
-export default function Home() {
-  return (
-      <>
-          <Container className="mt-10">
-              <Title text="Все пиццы" size="lg" className="font-extrabold" />
-          </Container>
+export default async function Home() {
+    const categories = await prisma.category.findMany({
+        include: {
+            products: {
+                include: {
+                    ingredients: true,
+                    items: true
+                }
+            }
+        }
+    });
 
-          <TopBar />
+    return (
+        <>
+            <Container className="mt-10">
+                <Title text="Все пиццы" size="lg" className="font-extrabold"/>
+            </Container>
 
-          <Container className="mt-10 pb-14">
-              <div className="flex gap-[80px]">
-                  <div className="w-[250px]">
-                     <Filters />
-                  </div>
+            <TopBar categories={categories.filter((category) => category.products.length > 0)} />
 
-                  <div className="flex-1">
-                      <div className="flex flex-col gap-16">
-                          <ProductGroupList
-                              title="Pizzas"
-                              items={[
-                                  {
-                                      id: 1,
-                                      name: "Чизбергер-пицца",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF9050501F3FA690A64053F5F07626.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 2,
-                                      name: "Чизбергер-пицца",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF9050501F3FA690A64053F5F07626.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 3,
-                                      name: "Чизбергер-пицца",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF9050501F3FA690A64053F5F07626.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 4,
-                                      name: "Чизбергер-пицца",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF9050501F3FA690A64053F5F07626.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 5,
-                                      name: "Чизбергер-пицца",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF9050501F3FA690A64053F5F07626.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 6,
-                                      name: "Чизбергер-пицца",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF9050501F3FA690A64053F5F07626.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                              ]}
-                              categoryId={1}
-                          />
+            <Container className="mt-10 pb-14">
+                <div className="flex gap-[80px]">
+                    <div className="w-[250px]">
+                        <Filters/>
+                    </div>
 
-                          <ProductGroupList
-                              title="Combo"
-                              items={[
-                                  {
-                                      id: 1,
-                                      name: "Дэнвич с говядиной",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF023C30BF9E6BA72D6ABB6375A56D.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 2,
-                                      name: "Дэнвич с говядиной",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF023C30BF9E6BA72D6ABB6375A56D.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 3,
-                                      name: "Дэнвич с говядиной",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF023C30BF9E6BA72D6ABB6375A56D.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 4,
-                                      name: "Дэнвич с говядиной",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF023C30BF9E6BA72D6ABB6375A56D.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 5,
-                                      name: "Дэнвич с говядиной",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF023C30BF9E6BA72D6ABB6375A56D.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                                  {
-                                      id: 6,
-                                      name: "Дэнвич с говядиной",
-                                      imageUrl: "https://media.dodostatic.net/image/r:292x292/11EF023C30BF9E6BA72D6ABB6375A56D.jpg",
-                                      price: 550,
-                                      items: [{price: 550}]
-                                  },
-                              ]}
-                              categoryId={2}
-                          />
-                      </div>
-                  </div>
-              </div>
-          </Container>
-      </>
-  );
+                    <div className="flex-1">
+                        <div className="flex flex-col gap-16">
+                            {categories.map((category) =>
+                                    category.products.length > 0 && (
+                                        <ProductGroupList
+                                            key={category.id}
+                                            categoryId={category.id}
+                                            title={category.name}
+                                            items={category.products}
+                                        />
+                                    )
+                                )
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Container>
+        </>
+    );
 }

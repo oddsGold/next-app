@@ -1,7 +1,7 @@
-import {prisma} from "./prisma-client";
-import {hashSync} from 'bcrypt';
-import {_ingredients, categories, products} from "./constants";
-import {Prisma} from "@prisma/client";
+import { Prisma } from '@prisma/client';
+import { categories, _ingredients, products } from './constants';
+import { prisma } from './prisma-client';
+import { hashSync } from 'bcrypt';
 
 const randomDecimalNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
@@ -25,44 +25,35 @@ const generateProductItem = ({
 };
 
 async function up() {
-
     await prisma.user.createMany({
         data: [
             {
-                fullName: "John",
-                email: "john@example.com",
+                fullName: 'User Test',
+                email: 'user@test.ru',
                 password: hashSync('111111', 10),
                 verified: new Date(),
-                role: 'USER'
+                role: 'USER',
             },
             {
-                fullName: "Administrator",
-                email: "admin@example.com",
+                fullName: 'Admin Admin',
+                email: 'admin@test.ru',
                 password: hashSync('111111', 10),
                 verified: new Date(),
-                role: 'ADMIN'
+                role: 'ADMIN',
             },
-            {
-                fullName: "User",
-                email: "user@example.com",
-                password: hashSync('111111', 10),
-                verified: new Date(),
-                role: 'USER'
-            },
-
-        ]
+        ],
     });
 
     await prisma.category.createMany({
-        data: categories
-    })
+        data: categories,
+    });
 
     await prisma.ingredient.createMany({
-        data: _ingredients
+        data: _ingredients,
     });
 
     await prisma.product.createMany({
-        data: products
+        data: products,
     });
 
     const pizza1 = await prisma.product.create({
@@ -71,7 +62,7 @@ async function up() {
             imageUrl:
                 'https://media.dodostatic.net/image/r:233x233/11EE7D61304FAF5A98A6958F2BB2D260.webp',
             categoryId: 1,
-            ingradient: {
+            ingredients: {
                 connect: _ingredients.slice(0, 5),
             },
         },
@@ -83,7 +74,7 @@ async function up() {
             imageUrl:
                 'https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp',
             categoryId: 1,
-            ingradient: {
+            ingredients: {
                 connect: _ingredients.slice(5, 10),
             },
         },
@@ -95,7 +86,7 @@ async function up() {
             imageUrl:
                 'https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp',
             categoryId: 1,
-            ingradient: {
+            ingredients: {
                 connect: _ingredients.slice(10, 40),
             },
         },
@@ -104,45 +95,41 @@ async function up() {
     await prisma.productItem.createMany({
         data: [
             // Пицца "Пепперони фреш"
-            generateProductItem({productId: pizza1.id, pizzaType: 1, size: 20}),
-            generateProductItem({productId: pizza1.id, pizzaType: 1, size: 30}),
-            generateProductItem({productId: pizza1.id, pizzaType: 2, size: 30}),
-            generateProductItem({productId: pizza1.id, pizzaType: 2, size: 40}),
+            generateProductItem({ productId: pizza1.id, pizzaType: 1, size: 20 }),
+            generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 30 }),
+            generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 40 }),
 
             // Пицца "Сырная"
-            generateProductItem({productId: pizza2.id, pizzaType: 1, size: 20}),
-            generateProductItem({productId: pizza2.id, pizzaType: 1, size: 30}),
-            generateProductItem({productId: pizza2.id, pizzaType: 1, size: 40}),
-            generateProductItem({productId: pizza2.id, pizzaType: 2, size: 20}),
-            generateProductItem({productId: pizza2.id, pizzaType: 2, size: 30}),
-            generateProductItem({productId: pizza2.id, pizzaType: 2, size: 40}),
+            generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 20 }),
+            generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 30 }),
+            generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 40 }),
+            generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 20 }),
+            generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 30 }),
+            generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 40 }),
 
             // Пицца "Чоризо фреш"
-            generateProductItem({productId: pizza3.id, pizzaType: 1, size: 20}),
-            generateProductItem({productId: pizza3.id, pizzaType: 1, size: 30}),
-            generateProductItem({productId: pizza3.id, pizzaType: 1, size: 40}),
-            generateProductItem({productId: pizza3.id, pizzaType: 2, size: 20}),
-            generateProductItem({productId: pizza3.id, pizzaType: 2, size: 30}),
-            generateProductItem({productId: pizza3.id, pizzaType: 2, size: 40}),
+            generateProductItem({ productId: pizza3.id, pizzaType: 1, size: 20 }),
+            generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 30 }),
+            generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 40 }),
 
             // Остальные продукты
-            generateProductItem({productId: 1}),
-            generateProductItem({productId: 2}),
-            generateProductItem({productId: 3}),
-            generateProductItem({productId: 4}),
-            generateProductItem({productId: 5}),
-            generateProductItem({productId: 6}),
-            generateProductItem({productId: 7}),
-            generateProductItem({productId: 8}),
-            generateProductItem({productId: 9}),
-            generateProductItem({productId: 10}),
-            generateProductItem({productId: 11}),
-            generateProductItem({productId: 12}),
-            generateProductItem({productId: 13}),
-            generateProductItem({productId: 14}),
-            generateProductItem({productId: 15}),
-            generateProductItem({productId: 16}),
-            generateProductItem({productId: 17}),
+            generateProductItem({ productId: 1 }),
+            generateProductItem({ productId: 2 }),
+            generateProductItem({ productId: 3 }),
+            generateProductItem({ productId: 4 }),
+            generateProductItem({ productId: 5 }),
+            generateProductItem({ productId: 6 }),
+            generateProductItem({ productId: 7 }),
+            generateProductItem({ productId: 8 }),
+            generateProductItem({ productId: 9 }),
+            generateProductItem({ productId: 10 }),
+            generateProductItem({ productId: 11 }),
+            generateProductItem({ productId: 12 }),
+            generateProductItem({ productId: 13 }),
+            generateProductItem({ productId: 14 }),
+            generateProductItem({ productId: 15 }),
+            generateProductItem({ productId: 16 }),
+            generateProductItem({ productId: 17 }),
         ],
     });
 
@@ -158,12 +145,6 @@ async function up() {
                 totalAmount: 0,
                 token: '222222',
             },
-
-            {
-                userId: 3,
-                totalAmount: 0,
-                token: '333333',
-            },
         ],
     });
 
@@ -178,10 +159,68 @@ async function up() {
         },
     });
 
+    await prisma.story.createMany({
+        data: [
+            {
+                previewImageUrl:
+                    'https://cdn.inappstory.ru/story/xep/xzh/zmc/cr4gcw0aselwvf628pbmj3j/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=3101815496',
+            },
+            {
+                previewImageUrl:
+                    'https://cdn.inappstory.ru/story/km2/9gf/jrn/sb7ls1yj9fe5bwvuwgym73e/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=3074015640',
+            },
+            {
+                previewImageUrl:
+                    'https://cdn.inappstory.ru/story/quw/acz/zf5/zu37vankpngyccqvgzbohj1/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=1336215020',
+            },
+            {
+                previewImageUrl:
+                    'https://cdn.inappstory.ru/story/7oc/5nf/ipn/oznceu2ywv82tdlnpwriyrq/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=38903958',
+            },
+            {
+                previewImageUrl:
+                    'https://cdn.inappstory.ru/story/q0t/flg/0ph/xt67uw7kgqe9bag7spwkkyw/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=2941222737',
+            },
+            {
+                previewImageUrl:
+                    'https://cdn.inappstory.ru/story/lza/rsp/2gc/xrar8zdspl4saq4uajmso38/custom_cover/logo-350x440.webp?k=IgAAAAAAAAAE&v=4207486284',
+            },
+        ],
+    });
+
+    await prisma.storyItem.createMany({
+        data: [
+            {
+                storyId: 1,
+                sourceUrl:
+                    'https://cdn.inappstory.ru/file/dd/yj/sx/oqx9feuljibke3mknab7ilb35t.webp?k=IgAAAAAAAAAE',
+            },
+            {
+                storyId: 1,
+                sourceUrl:
+                    'https://cdn.inappstory.ru/file/jv/sb/fh/io7c5zarojdm7eus0trn7czdet.webp?k=IgAAAAAAAAAE',
+            },
+            {
+                storyId: 1,
+                sourceUrl:
+                    'https://cdn.inappstory.ru/file/ts/p9/vq/zktyxdxnjqbzufonxd8ffk44cb.webp?k=IgAAAAAAAAAE',
+            },
+            {
+                storyId: 1,
+                sourceUrl:
+                    'https://cdn.inappstory.ru/file/ur/uq/le/9ufzwtpdjeekidqq04alfnxvu2.webp?k=IgAAAAAAAAAE',
+            },
+            {
+                storyId: 1,
+                sourceUrl:
+                    'https://cdn.inappstory.ru/file/sy/vl/c7/uyqzmdojadcbw7o0a35ojxlcul.webp?k=IgAAAAAAAAAE',
+            },
+        ],
+    });
 }
 
 async function down() {
-    await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`;
+    await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE`;
     await prisma.$executeRaw`TRUNCATE TABLE "Category" RESTART IDENTITY CASCADE`;
     await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
     await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
@@ -204,7 +243,7 @@ main()
         await prisma.$disconnect();
     })
     .catch(async (e) => {
-        console.error(e)
+        console.error(e);
         await prisma.$disconnect();
         process.exit(1);
-    })
+    });
