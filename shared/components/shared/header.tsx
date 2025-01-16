@@ -1,8 +1,8 @@
 import React from 'react';
 import {cn} from "@/shared/lib/utils";
-import {Container, SearchInput} from "@/components/shared";
+import {Container, SearchInput} from "@/shared/components/shared/index";
 import Image from "next/image";
-import {Button} from "@/components/ui";
+import {Button} from "@/shared/components/ui";
 import {ArrowRight, ShoppingCart, User} from "lucide-react";
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ export const Header: React.FC<Props> = ({ className }) => {
  return (
   <header className={cn('border border-b', className)}>
       <Container className='flex items-center justify-between py-8'>
-          <Link href="/">
+          <Link href="/public">
               <div className='flex items-center gap-4'>
                   <Image src="/logo.png" alt="Logo" width={35} height={35}/>
                   <div>

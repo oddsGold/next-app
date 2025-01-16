@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import {Dialog} from "@/components/ui";
-import {DialogContent} from "@/components/ui/dialog";
+import {Dialog} from "@/shared/components/ui";
+import {DialogContent} from "@/shared/components/ui/dialog";
 import {cn} from "@/shared/lib/utils";
-import {ChoosePizzaForm, ChooseProductForm} from "@/components/shared";
+import {ChoosePizzaForm, ChooseProductForm} from "@/shared/components/shared";
 import {ProductWithRelations} from "@/@types/prisma";
 
 interface Props {

@@ -1,8 +1,8 @@
 'use client';
 
 import React from "react";
-import {FilterCheckbox, FilterCheckboxProps} from "@/components/shared/filter-checkbox";
-import {Input, Skeleton} from "@/components/ui";
+import {FilterCheckbox, FilterCheckboxProps} from "@/shared/components/shared/filter-checkbox";
+import {Input, Skeleton} from "@/shared/components/ui";
 
 type Item = FilterCheckboxProps;
 

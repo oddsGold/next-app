@@ -1,9 +1,9 @@
 'use client';
 
 import React, {useCallback} from 'react';
-import {Title} from "@/components/shared/title";
+import {Title} from "@/shared/components/shared/title";
 import {cn} from "@/shared/lib/utils";
-import {ProductCard} from "@/components/shared/product-card";
+import {ProductCard} from "@/shared/components/shared/product-card";
 import { useIntersection } from 'react-use';
 import {useCategoryStore} from "@/shared/store/category";
 

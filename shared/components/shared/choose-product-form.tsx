@@ -1,8 +1,8 @@
 import React from 'react';
 import {cn} from "@/shared/lib/utils";
-import {PizzaImage} from "@/components/shared/pizza-image";
-import {Title} from "@/components/shared/title";
-import {Button} from "@/components/ui";
+import {PizzaImage} from "@/shared/components/shared/pizza-image";
+import {Title} from "@/shared/components/shared/title";
+import {Button} from "@/shared/components/ui";
 
 interface Props {
     imageUrl: string;
