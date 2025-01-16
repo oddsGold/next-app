@@ -2,10 +2,10 @@
 
 import React, {Fragment, useRef} from 'react';
 import {Search} from "lucide-react";
-import {cn} from "@/lib/utils";
+import {cn} from "@/shared/lib/utils";
 import {useClickAway, useDebounce} from 'react-use';
 import Link from "next/link";
-import {API} from "@/services/api-client";
+import {API} from "@/shared/services/api-client";
 import {Product} from "@prisma/client";
 
 interface Props {
