@@ -4,10 +4,12 @@ import {Image, Info, Price} from "@/shared/components/shared/cart-item-details";
 import {CartItemProps} from "@/shared/components/shared/cart-item-details/cart-item-details.types";
 import {CountButton} from "@/shared/components/shared/count-button";
 import {Trash2Icon} from "lucide-react";
+import {Spinner} from "@/shared/components/ui";
 
 interface Props extends CartItemProps {
     onClickCountButton?: (type: 'plus' | 'minus') => void;
     onClickRemove?: () => void;
+    loadingItemIds: (number | string)[];
     className?: string;
 }
 
@@ -20,10 +22,13 @@ export const CartDrawerItem: React.FC<Props> = ({
                                                     details,
                                                     onClickCountButton,
                                                     onClickRemove,
-                                                    className
+                                                    className,
+                                                    loadingItemIds
                                                 }) => {
+    const isLoading = loadingItemIds.includes(id);
+
     return (
-        <div className={cn('flex bg-white p-5 gap-6', className)}>
+        <div className={cn('relative flex bg-white p-5 gap-6', className)}>
             <Image src={imageUrl}/>
 
             <div className="flex-1">
@@ -40,6 +45,12 @@ export const CartDrawerItem: React.FC<Props> = ({
                     </div>
                 </div>
             </div>
+
+            {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/70">
+                    <Spinner size="large" />
+                </div>
+            )}
         </div>
     );
 };
