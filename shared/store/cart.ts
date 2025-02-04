@@ -15,6 +15,7 @@ export type ICartItem = {
 
 export interface CartState {
     loading: boolean;
+    loadingItemIds: (number | string)[];
     error: boolean;
     totalAmount: number;
     items: CartStateItem[];
@@ -37,6 +38,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     items: [],
     error: false,
     loading: true,
+    loadingItemIds: [],
     totalAmount: 0,
 
     fetchCartItems: async () => {
@@ -54,17 +56,45 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     updateItemQuantity: async (id: number, quantity: number) => {
         try {
-            set({ loading: true, error: false });
+            set((state) => ({
+                loading: true,
+                loadingItemIds: [...state.loadingItemIds, id],
+                error: false,
+            }));
             const data = await API.cart.updateItemQuantity(id, quantity);
             set(getCartDetails(data));
         } catch (error) {
             console.error(error);
             set({ error: true });
         } finally {
-            set({ loading: false });
+            set((state) => ({
+                loading: false,
+                loadingItemIds: state.loadingItemIds.filter((itemId) => itemId !== id),
+            }));
+        }
+    },
+
+    removeCartItem: async (id: number) => {
+        try {
+            set((state) => ({
+                loading: true,
+                loadingItemIds: [...state.loadingItemIds, id],
+                error: false,
+                items: state.items.map((item) => (item.id === id ? { ...item, disabled: true } : item)),
+            }));
+            const data = await API.cart.removeCartItem(id);
+            set(getCartDetails(data));
+        } catch (error) {
+            console.error(error);
+            set({ error: true });
+        } finally {
+            set((state) => ({
+                loading: false,
+                loadingItemIds: state.loadingItemIds.filter((itemId) => itemId !== id),
+                items: state.items.map((item) => ({ ...item, disabled: false })),
+            }));
         }
     },
 
     addCartItem: async (values: any) => {},
-    removeCartItem: async (id: number) => {}
 }));
