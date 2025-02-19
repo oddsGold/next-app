@@ -15,8 +15,7 @@ interface Props {
 }
 
 export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, className }) => {
-    const vatPrice = (totalAmount * VAT) / 100;
-    const totalPrice = totalAmount + DELIVERY_PRICE + vatPrice;
+    const totalPrice = totalAmount + DELIVERY_PRICE;
 
     return (
         <WhiteBlock className={cn('p-6 sticky top-4', className)}>
@@ -25,7 +24,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, classNa
                 {loading ? (
                     <Skeleton className="h-11 w-48" />
                 ) : (
-                    <span className="h-11 text-[34px] font-extrabold">{totalPrice} ₽</span>
+                    <span className="h-11 text-[34px] font-extrabold">{totalPrice} $</span>
                 )}
             </div>
 
@@ -36,16 +35,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, classNa
                         Стоимость корзины:
                     </div>
                 }
-                value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${totalAmount} ₽`}
-            />
-            <CheckoutItemDetails
-                title={
-                    <div className="flex items-center">
-                        <Percent size={18} className="mr-2 text-gray-400" />
-                        Налоги:
-                    </div>
-                }
-                value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${vatPrice} ₽`}
+                value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${totalAmount} $`}
             />
             <CheckoutItemDetails
                 title={
@@ -54,7 +44,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, classNa
                         Доставка:
                     </div>
                 }
-                value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${DELIVERY_PRICE} ₽`}
+                value={loading ? <Skeleton className="h-6 w-16 rounded-[6px]" /> : `${DELIVERY_PRICE} $`}
             />
 
             <Button
