@@ -4,8 +4,7 @@ import {CheckoutFormValues} from "@/shared/constants";
 import {prisma} from "@/prisma/prisma-client";
 import {OrderStatus} from "@prisma/client";
 import { cookies } from 'next/headers';
-import {PayOrderTemplate} from "@/shared/components/shared/email-temapltes";
-// import {sendEmail} from "@/shared/lib";
+import {createPayment} from "@/shared/lib";
 
 export async function createOrder(data: CheckoutFormValues) {
 
@@ -76,29 +75,28 @@ export async function createOrder(data: CheckoutFormValues) {
             },
         });
 
-        // const paymentData = await createPayment({
-        //     amount: order.totalAmount,
-        //     orderId: order.id,
-        //     description: 'Оплата заказа #' + order.id,
-        // });
-        //
-        // if (!paymentData) {
-        //     throw new Error('Payment data not found');
-        // }
-        //
-        // await prisma.order.update({
-        //     where: {
-        //         id: order.id,
-        //     },
-        //     data: {
-        //         paymentId: paymentData.id,
-        //     },
-        // });
-        //
-        // const paymentUrl = paymentData.confirmation.confirmation_url;
+        const paymentData = await createPayment({
+            amount: order.totalAmount,
+            orderId: order.id,
+            description: 'Оплата заказа #' + order.id,
+        });
+
+        if (!paymentData) {
+            throw new Error('Payment data not found');
+        }
+
+        await prisma.order.update({
+            where: {
+                id: order.id,
+            },
+            data: {
+                paymentId: paymentData.id,
+            },
+        });
+
+        const paymentUrl = paymentData.confirmation.confirmation_url;
 
         // Отправка email через API маршрут
-
         const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/send-email`, {
             method: 'POST',
             headers: {
@@ -109,13 +107,13 @@ export async function createOrder(data: CheckoutFormValues) {
                 subject: `Next Pizza / Pay for your order #${order.id}`,
                 orderId: order.id,
                 totalAmount: order.totalAmount,
-                paymentUrl: 'https://intervals.icu',
+                paymentUrl,
             }),
         });
 
         const responseData = await response.json();
 
-        return 'https://intervals.icu/?w=2025-03-10';
+        return paymentUrl;
 
     }catch(err){
 
