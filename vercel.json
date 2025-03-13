@@ -1,16 +1,3 @@
 {
-    "builds": [
-    {
-        "src": "package.json",
-        "use": "@vercel/node"
-    }
-],
-    "build": {
-    "env": {
-        "DATABASE_URL": "postgres://neondb_owner:kWz7gKtPa8jL@ep-aged-cell-a2rxx4lt-pooler.eu-central-1.aws.neon.tech/neondb?sslmode=require"
-    },
-    "commands": [
-        "npx prisma generate"
-    ]
-}
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
