@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(req: any, res: any) {
     try {
-        const user = await getServerSession(authOptions);
+        const user = await getServerSession(req, res, authOptions);
 
         if (!user) {
             return NextResponse.json({ message: 'Вы не авторизованы' }, { status: 401 });
