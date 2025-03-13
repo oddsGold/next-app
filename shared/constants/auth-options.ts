@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
 import { prisma } from '@/prisma/prisma-client';
-import { compare, hashSync } from 'bcrypt';
+import {compare, compareSync, hashSync} from 'bcrypt';
 import { UserRole } from '@prisma/client';
 
 export const authOptions: AuthOptions = {
@@ -49,7 +49,7 @@ export const authOptions: AuthOptions = {
                     return null;
                 }
 
-                const isPasswordValid = await compare(credentials.password, findUser.password);
+                const isPasswordValid = compareSync(credentials.password, findUser.password);
 
                 if (!isPasswordValid) {
                     return null;

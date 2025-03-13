@@ -18,4 +18,6 @@ export { WhiteBlock } from './white-block';
 export { RequiredSymbol } from './required-symbol';
 export { ErrorText } from './error-text';
 export { ClearButton } from './clear-button';
+export { ProfileForm } from './profile-form';
+export { InfoBlock } from './info-block';
 export * from './modals';

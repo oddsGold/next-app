@@ -7,6 +7,7 @@ import { cookies } from 'next/headers';
 import {createPayment} from "@/shared/lib";
 import {hashSync} from "bcrypt";
 import {getUserSession} from "@/shared/lib/get-user-session";
+import {VerificationUserTemplate} from "@/shared/components/shared/email-temapltes/verification-user";
 
 export async function createOrder(data: CheckoutFormValues) {
 
@@ -136,6 +137,12 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
             },
         });
 
+        const passwordToHash = body.password;
+
+        const newHashedPassword = passwordToHash && typeof passwordToHash === "string"
+            ? hashSync(passwordToHash, 10)
+            : findUser?.password;
+
         await prisma.user.update({
             where: {
                 id: Number(currentUser.id),
@@ -143,7 +150,7 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
             data: {
                 fullName: body.fullName,
                 email: body.email,
-                password: body.password ? hashSync(body.password as string, 10) : findUser?.password,
+                password: newHashedPassword,
             },
         });
     } catch (err) {
@@ -185,13 +192,20 @@ export async function registerUser(body: Prisma.UserCreateInput) {
             },
         });
 
-        await sendEmail(
-            createdUser.email,
-            'Next Pizza / 📝 Подтверждение регистрации',
-            VerificationUserTemplate({
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/verification-account`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                to: createdUser.email,
+                subject: `'Next Pizza / 📝 Подтверждение регистрации`,
                 code,
             }),
-        );
+        });
+
+        const responseData = await response.json();
+
     } catch (err) {
         console.log('Error [CREATE_USER]', err);
         throw err;
