@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         </p>
 
         <p>
-            <a href="http://localhost:3000/api/auth/verify?code=${code}">Confirm registration</a>
+            <a href="${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/verify?code=${code}">Confirm registration</a>
         </p>
     </div>
 `;
